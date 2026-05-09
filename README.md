@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ShiftTrack Pro
 
-## Getting Started
+Full-stack work time, overtime and payroll tracking system built with Next.js, Node.js, PostgreSQL and Prisma.
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+ShiftTrack Pro is a production-style workforce management application designed to handle:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- work shift tracking
+- overtime calculation
+- break management
+- payroll-related calculations
+- approval workflows
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The project is inspired by real industrial work environments and focuses on realistic business logic rather than simplified demo functionality.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+### Frontend
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Backend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Node.js
+- Next.js API Routes
+- Prisma ORM
 
-## Deploy on Vercel
+### Database
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- PostgreSQL
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Validation & Utilities
+
+- Zod
+- React Hook Form
+- date-fns
+
+## Architecture
+
+The project follows a layered architecture approach:
+
+- Domain layer
+- Application layer
+- Infrastructure layer
+- Interface/API layer
+
+Main focus:
+
+- clean architecture
+- business logic separation
+- realistic payroll calculations
+- scalable project structure
+
+## Planned Features
+
+- Authentication & authorization
+- Multi-user organization support
+- Shift templates
+- Work log tracking
+- Overtime calculations
+- Break deduction rules
+- Night shift support
+- Approval workflows
+- Payroll summaries
+- Reporting dashboard
+
+## Project Status
+
+Project initialization and architecture phase.
+
+## Author
+
+Andy Erokhin
