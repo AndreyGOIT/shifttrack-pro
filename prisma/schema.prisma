@@ -24,6 +24,13 @@ enum EmploymentType {
   CONTRACTOR
 }
 
+enum WorkLogStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
 model Organization {
   id        String   @id @default(cuid())
   name      String
@@ -32,6 +39,8 @@ model Organization {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  shiftTemplates ShiftTemplate[]
 }
 
 model User {
@@ -53,4 +62,96 @@ model User {
   updatedAt       DateTime         @updatedAt
 
   @@index([organizationId])
+
+  workLogs WorkLog[]
+}
+
+model ShiftTemplate {
+  id                    String @id @default(cuid())
+
+  organizationId        String
+  organization          Organization @relation(fields: [organizationId], references: [id])
+
+  name                  String
+
+  plannedStartHour      Int
+  plannedStartMinute    Int
+
+  plannedEndHour        Int
+  plannedEndMinute      Int
+
+  defaultBreakMinutes   Int
+
+  isNightShift          Boolean @default(false)
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  workLogs              WorkLog[]
+
+  @@index([organizationId])
+}
+
+model WorkLog {
+  id                String @id @default(cuid())
+
+  userId            String
+  user              User @relation(fields: [userId], references: [id])
+
+  shiftTemplateId   String?
+  shiftTemplate     ShiftTemplate? @relation(fields: [shiftTemplateId], references: [id])
+
+  workDate          DateTime
+
+  startedAt         DateTime
+  endedAt           DateTime
+
+  notes             String?
+
+  status            WorkLogStatus @default(DRAFT)
+
+  approvedById      String?
+  approvedAt        DateTime?
+
+  breakEntries      BreakEntry[]
+
+  workSummary       WorkSummary?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([userId])
+  @@index([workDate])
+}
+
+model BreakEntry {
+  id              String @id @default(cuid())
+
+  workLogId       String
+  workLog         WorkLog @relation(fields: [workLogId], references: [id], onDelete: Cascade)
+
+  startedAt       DateTime
+  endedAt         DateTime
+
+  isPaid          Boolean @default(false)
+
+  createdAt       DateTime @default(now())
+}
+
+model WorkSummary {
+  id                     String @id @default(cuid())
+
+  workLogId              String @unique
+  workLog                WorkLog @relation(fields: [workLogId], references: [id], onDelete: Cascade)
+
+  regularMinutes         Int
+
+  overtimeMinutes        Int
+  doubleOvertimeMinutes  Int
+
+  nightMinutes           Int
+
+  unpaidBreakMinutes     Int
+
+  calculatedAt           DateTime @default(now())
 }
