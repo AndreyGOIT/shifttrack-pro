@@ -1,6 +1,10 @@
 import { BreakCalculator } from './BreakCalculator';
 import { TimeRoundingService } from './TimeRoundingService';
 import { WorkTimeCalculator } from './WorkTimeCalculator';
+import {
+  OvertimeCalculationResult,
+  OvertimeCalculator,
+} from './OvertimeCalculator';
 
 export interface PayrollCalculationInput {
   startedAt: Date;
@@ -11,12 +15,14 @@ export interface PayrollCalculationInput {
 export interface PayrollCalculationResult {
   totalMinutes: number;
   workedMinutes: number;
+  overtime: OvertimeCalculationResult;
 }
 
 export class PayrollCalculationEngine {
   private readonly roundingService = new TimeRoundingService();
   private readonly breakCalculator = new BreakCalculator();
   private readonly workTimeCalculator = new WorkTimeCalculator();
+  private readonly overtimeCalculator = new OvertimeCalculator();
   private calculateShiftDurationInMinutes(
     startedAt: Date,
     endedAt: Date,
@@ -41,10 +47,19 @@ export class PayrollCalculationEngine {
       registeredBreakMinutes: input.registeredBreakMinutes,
     });
 
-    return this.workTimeCalculator.calculate({
+    const workTime = this.workTimeCalculator.calculate({
       startedAt: roundedStart,
       endedAt: roundedEnd,
       unpaidBreakMinutes: breakMinutes,
     });
+
+    const overtime = this.overtimeCalculator.calculate({
+      workedMinutes: workTime.workedMinutes,
+    });
+
+    return {
+      ...workTime,
+      overtime,
+    };
   }
 }
