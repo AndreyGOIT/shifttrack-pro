@@ -14,4 +14,26 @@ export class Duration {
   toMinutes(): number {
     return this.minutes;
   }
+  
+  static zero(): Duration {
+    return new Duration(0);
+  }
+
+  add(other: Duration): Duration {
+    return new Duration(this.minutes + other.minutes);
+  }
+
+  subtract(other: Duration): Duration {
+    const result = this.minutes - other.minutes;
+
+    if (result < 0) {
+      throw new Error('Duration cannot be negative.');
+    }
+
+    return new Duration(result);
+  }
+
+  equals(other: Duration): boolean {
+    return this.minutes === other.minutes;
+  }
 }
