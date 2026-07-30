@@ -1,4 +1,5 @@
 // src/domain/services/WorkTimeCalculator.ts
+import { Duration } from '../value-objects/Duration';
 
 export interface WorkTimeCalculationInput {
   startedAt: Date;
@@ -12,9 +13,7 @@ export interface WorkTimeCalculationResult {
 }
 
 export class WorkTimeCalculator {
-  calculate(
-    input: WorkTimeCalculationInput,
-  ): WorkTimeCalculationResult {
+  calculate(input: WorkTimeCalculationInput): WorkTimeCalculationResult {
     const { startedAt, endedAt, unpaidBreakMinutes = 0 } = input;
 
     if (endedAt <= startedAt) {
@@ -29,15 +28,15 @@ export class WorkTimeCalculator {
       (endedAt.getTime() - startedAt.getTime()) / 60000,
     );
 
-    const workedMinutes = totalMinutes - unpaidBreakMinutes;
+    const totalDuration = Duration.fromMinutes(totalMinutes);
 
-    if (workedMinutes < 0) {
-      throw new Error('Worked minutes cannot be negative');
-    }
+    const workedDuration = totalDuration.subtract(
+      Duration.fromMinutes(unpaidBreakMinutes),
+    );
 
     return {
-      totalMinutes,
-      workedMinutes,
+      totalMinutes: totalDuration.toMinutes(),
+      workedMinutes: workedDuration.toMinutes(),
     };
   }
 }
